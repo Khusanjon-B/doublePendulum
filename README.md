@@ -58,6 +58,8 @@ The same coupled equations, integrated with **4th-order Runge–Kutta**. The phy
 - **Frame-rate independence.** Physics is stepped by `dt = GetFrameTime()`, so motion runs at a consistent real-world speed regardless of frame rate.
 - **Fixed-length trail.** The lower bob's recent positions are stored in a capped buffer and drawn as fading line segments (newer = brighter).
 - **Throttled UI.** The energy/drift text refreshes a few times per second rather than every frame, decoupling display rate from simulation rate for readability.
+- **Coordinate-space discipline.** The pendulum is drawn in a camera-centered world space (origin at screen center); the UI (energy text, reset button) is drawn in screen space. Hit-tests are matched to the space of the thing being tested — world coordinates for the bobs, screen coordinates for the button — which is the source of most interaction bugs when mixed up.
+- **Angle recovery via `atan2`.** Dragging a bob recovers the arm's angle from the touch point relative to that arm's pivot, using `atan2(dy, dx)` for full 360° coverage in the display's y-down convention.
 
 ---
 
@@ -81,7 +83,15 @@ Run each iteration from a terminal on the display (raylib needs a real display s
 
 ## Controls
 
-- **Drag the pivot** (touch or mouse) to reposition the anchor while it swings.
+- **Drag the pivot** (touch or mouse) to reposition the whole system while it swings.
+- **Drag either bob** to set that arm's angle by hand — grab the middle joint to aim the upper arm, or the end bob to aim the lower one. Releasing drops the arm from rest into free motion, letting you set arbitrary initial conditions and watch the chaos unfold from there.
+- **Reset Trace** button clears the accumulated motion trail.
+
+### Interaction notes
+
+Because the system is chaotic, the end bob is genuinely difficult to catch by touch — its position is sensitively dependent on everything that came before, so it rarely goes where you expect. This is the physical meaning of chaos made tactile.
+
+When an arm is dragged, physics for the whole system is paused so the integrator doesn't fight the finger, and the **energy baseline is re-captured on release** — repositioning by hand injects or removes energy, so drift is measured relative to the new configuration rather than the original launch. Energy is computed every frame from the arms' current state (not from the integrator's output), so the readout stays valid during manual repositioning as well as free simulation.
 
 ---
 
@@ -96,7 +106,8 @@ Run each iteration from a terminal on the display (raylib needs a real display s
 
 ## Possible extensions
 
+- Live sliders for arm length / mass / gravity (tune without recompiling).
+- Multiple pendulums with near-identical initial conditions, to visualize divergence (chaos) directly.
 - Pivot forcing — drive the anchor's motion to whip the pendulum (accelerating reference frame).
-- Live sliders for arm length / mass / gravity.
-- Multiple pendulums with near-identical initial conditions, to visualize divergence (chaos).
 - Symplectic integrator (Verlet) for guaranteed long-term energy bounds.
+- A fullscreen DRM/KMS build for a dedicated touchscreen-appliance deployment (no desktop).
