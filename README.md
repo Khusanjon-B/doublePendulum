@@ -13,6 +13,13 @@ A chaotic double pendulum integrating the true coupled equations of motion. Buil
 
 *Topics: coupled ODEs, RK4 vs. Euler–Cromer, energy conservation, chaos, camera-space rendering.*
 
+### [Falling Sand](./falling-sand)
+A cellular-automaton sand simulation — a fixed grid where each cell follows one trivial local rule (fall down; if blocked, slide diagonally; otherwise stay), producing emergent piling and flow behavior with no equations of motion at all. The discrete counterpart to the double pendulum's continuous physics. Touch to pour sand, with an adjustable brush size.
+
+The interesting problems turned out to be bookkeeping rather than physics: the grid must be scanned bottom-to-top (top-to-bottom makes every grain teleport to the floor in a single frame), and the diagonal slide direction must be randomized with a fallback, or piles develop a directional bias and come out as right triangles instead of cones.
+
+*Topics: cellular automata, grid-based simulation, update-order correctness, emergent behavior, bounds checking.*
+
 ---
 
 ## Building
