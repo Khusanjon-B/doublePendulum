@@ -20,6 +20,13 @@ The interesting problems turned out to be bookkeeping rather than physics: the g
 
 *Topics: cellular automata, grid-based simulation, update-order correctness, emergent behavior, bounds checking.*
 
+### [Lorenz Attractor](./lorenz-attractor)
+An interactive 3D visualization of the Lorenz system — the classic chaotic "butterfly" attractor from dynamical systems theory. Integrated live with RK4 and rendered in raylib's 3D mode, with on-screen sliders to orbit the camera and to change the system's parameters (ρ, σ, β) in real time. Dragging ρ across its critical value (~24.74) makes the attractor collapse to a fixed point and bloom back into chaos — a live bifurcation.
+
+The focus here shifted more toward interactive UI (reusable sliders that separate knob position from mapped parameter value) and 3D rendering, including reconciling the Lorenz convention (z is up) with raylib's world (y is up) via an axis-swap, offset, and scale transform.
+
+*Topics: dynamical systems, chaos, strange attractors, RK4, 3D rendering, coordinate transforms, interactive UI, bifurcation.*
+
 ---
 
 ## Building
